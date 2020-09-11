@@ -46,6 +46,8 @@
         :defer t
         :init
         (progn
+          (with-eval-after-load 'jupyter-repl
+              (add-to-list 'evil-insert-state-modes 'jupyter-repl-mode))
           (spacemacs/set-leader-keys
             "aja" 'jupyter-repl-associate-buffer
             "ajc" 'jupyter-connect-repl
@@ -77,13 +79,12 @@
   (add-hook 'jupyter-repl-mode-hook 'smartparens-mode))
 
 (defun jupyter/post-init-org ()
-;;   ;; (with-eval-after-load 'org (jupyter/ox-ipynb-emacs-jupyter)))
-  (add-hook 'org-mode-hook #'jupyter/ox-ipynb-emacs-jupyter))
+  (with-eval-after-load 'ox-ipynb 
+    (add-hook 'org-mode-hook #'jupyter/ox-ipynb-emacs-jupyter)))
+
 
 (defun jupyter/init-ox-ipynb ()
-  (use-package ox-ipynb
-    :defer t
-    :after jupyter org
-    ))
-
+(use-package ox-ipynb
+  :defer t
+  :after jupyter org))
 ;;; packages.el ends here
